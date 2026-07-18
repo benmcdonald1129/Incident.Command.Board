@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Incident Command Board</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a1530">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ICS Board">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+
+<style>
+  html, body { margin: 0; padding: 0; background: #0a1530; }
+  #root { min-height: 100vh; }
+  * { -webkit-tap-highlight-color: transparent; }
+  #boot-error {
+    display: none;
+    color: #f3ede0;
+    font-family: -apple-system, system-ui, sans-serif;
+    padding: 24px;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+  #boot-error h1 { color: #e3b23c; font-size: 1.1rem; }
+  #boot-error pre {
+    background: #0e1c38;
+    border: 1px solid #223a6a;
+    border-radius: 8px;
+    padding: 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.8rem;
+    color: #ff9a8a;
+  }
+</style>
+
+<link rel="stylesheet" href="styles.css">
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+<script>
+  // Minimal CommonJS "require" shim so the precompiled app (which only ever
+  // requires the React automatic-JSX-runtime) can run as a plain script,
+  // with no build step and no client-side compiler needed.
+  function require(_path) {
+    function jsx(type, props, key) {
+      if (key !== undefined) {
+        var merged = {};
+        for (var k in props) merged[k] = props[k];
+        merged.key = key;
+        return React.createElement(type, merged);
+      }
+      return React.createElement(type, props);
+    }
+    return { jsx: jsx, jsxs: jsx, Fragment: React.Fragment };
+  }
+
+  // Surface any load/runtime error directly on screen (iPads have no console).
+  window.addEventListener("error", function (e) {
+    showBootError(e.message + "\n" + (e.filename || "") + ":" + (e.lineno || ""));
+  });
+  function showBootError(message) {
+    var el = document.getElementById("boot-error");
+    if (!el) return;
+    el.style.display = "block";
+    var pre = el.querySelector("pre");
+    pre.textContent = message;
+  }
+</script>
+</head>
+<body>
+<div id="root"></div>
+<div id="boot-error">
+  <h1>Something didn't load correctly</h1>
+  <p>Screenshot this and send it back for a fix:</p>
+  <pre></pre>
+</div>
+
+<script src="app.js"></script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('service-worker.js').catch(function () {});
+    });
+  }
+</script>
+</body>
+</html>
