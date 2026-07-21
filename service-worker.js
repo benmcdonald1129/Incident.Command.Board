@@ -1,4 +1,4 @@
-const CACHE_NAME = "icb-cache-v12";
+const CACHE_NAME = "icb-cache-v13";
 const ASSETS = [
   "./",
   "./index.html",
